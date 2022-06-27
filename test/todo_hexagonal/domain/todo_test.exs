@@ -22,5 +22,4 @@ defmodule TodoHexagonal.Domain.TodoTest do
       assert reason == "A datetime must be provided"
     end
   end
-
 end
