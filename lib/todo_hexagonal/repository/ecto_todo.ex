@@ -6,6 +6,8 @@ defmodule TodoHexagonal.Repository.EctoTodo do
   alias TodoHexagonal.Repo
   alias TodoHexagonal.Translators
 
+  @domain_translation %{description: :description, due_date: :due_date}
+
   @impl true
   def insert(description, due_date) do
     {:ok, todo} = Domain.Todo.create(description, due_date)
@@ -21,5 +23,14 @@ defmodule TodoHexagonal.Repository.EctoTodo do
       {:error, _} = err ->
         err
     end
+  end
+
+  @impl true
+  def get_all() do
+    all_todos =
+      Repo.all(EctoModel.Todo)
+      |> Enum.map(&Translators.Generic.translate(&1, Domain.Todo, @domain_translation))
+
+    {:ok, all_todos}
   end
 end
