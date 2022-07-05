@@ -8,7 +8,8 @@
 import Config
 
 config :todo_hexagonal,
-  ecto_repos: [TodoHexagonal.Repo]
+  ecto_repos: [TodoHexagonal.Repo],
+  repository: TodoHexagonal.Repository.EctoTodo
 
 # Configures the endpoint
 config :todo_hexagonal, TodoHexagonalWeb.Endpoint,
