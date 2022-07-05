@@ -8,10 +8,26 @@ defmodule TodoHexagonal.Domain.Todo do
   defstruct description: "", due_date: nil, done?: false
 
   @spec create(String.t(), DateTime.t()) :: {:ok, t()} | {:error, String.t()}
-  def create(description, due_date) do
+  def create(description, due_date = %DateTime{}) do
     case todo_valid?(description, due_date) do
       {true} -> {:ok, %__MODULE__{description: description, due_date: due_date}}
       {false, error} -> {:error, error}
+    end
+  end
+
+  @spec create(String.t(), String.t()) :: {:ok, t()} | {:error, String.t()}
+  def create(description, due_date = %NaiveDateTime{}) do
+    case DateTime.from_naive(due_date, "Etc/UTC") do
+      {:ok, datetime} -> create(description, datetime)
+      {:error, _} -> {:error, "A datetime must be provided"}
+    end
+  end
+
+  @spec create(String.t(), String.t()) :: {:ok, t()} | {:error, String.t()}
+  def create(description, due_date) when is_binary(due_date) do
+    case DateTime.from_iso8601(due_date) do
+      {:ok, datetime, _offset} -> create(description, datetime)
+      {:error, _} -> {:error, "A datetime must be provided"}
     end
   end
 
