@@ -7,6 +7,7 @@ defmodule TodoHexagonalWeb.Router do
 
   scope "/api", TodoHexagonalWeb do
     pipe_through :api
+    post "/todo/", TodoController, :create
   end
 
   # Enables LiveDashboard only for development
