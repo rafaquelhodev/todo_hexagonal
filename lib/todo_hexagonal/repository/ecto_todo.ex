@@ -6,19 +6,21 @@ defmodule TodoHexagonal.Repository.EctoTodo do
   alias TodoHexagonal.Repo
   alias TodoHexagonal.Translators
 
-  @domain_translation %{description: :description, due_date: :due_date}
+  @domain_translation %{description: :description, due_date: :due_date, done?: :done?}
 
   @impl true
-  def insert(description, due_date) do
-    {:ok, todo} = Domain.Todo.create(description, due_date)
-
-    relation_map = %{description: :description, due_date: :due_date}
+  def insert(description, due_date, done? \\ false) do
+    {:ok, todo} = Domain.Todo.create(description, due_date, done?)
 
     case %EctoModel.Todo{}
-         |> EctoModel.Todo.changeset(%{description: todo.description, due_date: todo.due_date})
+         |> EctoModel.Todo.changeset(%{
+           description: todo.description,
+           due_date: todo.due_date,
+           done?: done?
+         })
          |> Repo.insert() do
       {:ok, ecto_todo} ->
-        {:ok, Translators.Generic.translate(ecto_todo, Domain.Todo, relation_map)}
+        {:ok, Translators.Generic.translate(ecto_todo, Domain.Todo, @domain_translation)}
 
       {:error, _} = err ->
         err

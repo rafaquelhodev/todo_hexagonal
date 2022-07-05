@@ -5,6 +5,7 @@ defmodule TodoHexagonal.EctoModel.Todo do
   schema "todos" do
     field :description, :string
     field :due_date, :utc_datetime
+    field :done?, :boolean, default: false
 
     timestamps(type: :utc_datetime)
   end
@@ -12,7 +13,7 @@ defmodule TodoHexagonal.EctoModel.Todo do
   @doc false
   def changeset(todo, attrs) do
     todo
-    |> cast(attrs, [:description, :due_date])
+    |> cast(attrs, [:description, :due_date, :done?])
     |> validate_required([:description, :due_date])
   end
 end
