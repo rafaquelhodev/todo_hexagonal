@@ -1,6 +1,6 @@
 defmodule TodoHexagonal.UseCases do
-  def create_todo(description, due_date) do
-    repo().insert(description, due_date)
+  def create_todo(description, due_date, done? \\ false) do
+    repo().insert(description, due_date, done?)
   end
 
   def get_all_todos() do

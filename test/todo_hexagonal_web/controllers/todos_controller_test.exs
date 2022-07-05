@@ -14,7 +14,8 @@ defmodule TodoHexagonalWeb.TodosControllerTest do
     test "must create a new todo", %{conn: conn} do
       params = %{
         "description" => "must buy groceries",
-        "due_date" => "2018-11-15 10:00:00Z"
+        "due_date" => "2018-11-15 10:00:00Z",
+        "done" => true
       }
 
       conn = post(conn, Routes.todo_path(conn, :create, params))
@@ -23,7 +24,8 @@ defmodule TodoHexagonalWeb.TodosControllerTest do
 
       assert json_response(conn, 200) == %{
                "description" => "must buy groceries",
-               "due_date" => "2018-11-15T10:00:00Z"
+               "due_date" => "2018-11-15T10:00:00Z",
+               "done" => true
              }
     end
   end
